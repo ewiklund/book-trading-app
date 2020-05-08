@@ -1,0 +1,49 @@
+.center {
+  text-align: center;
+}
+
+#main  {
+  margin-top: 80px;
+}
+
+.bookName {
+  text-align: center;
+}
+
+.error {
+  color: #a94442;
+}
+
+.success {
+  color: #3c763d;
+}
+
+.myTradeRequest, .otherTradeRequest {
+  list-style-type: none;
+}
+
+#masthead.jumbotron {
+  margin-top: -30px;
+  color: white;
+  background-color: darkslateblue;
+}
+
+.indexButtons {
+  background-color: teal;
+}
+
+.bookName {
+  margin-right: 50px;
+  margin-top: 30px;
+}
+
+.bookDisplay {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.bookImage {
+  height: 150px;
+}

@@ -1,0 +1,56 @@
+<div class="container">
+  <a href="/trade/myRequests" type="button" class="btn btn-primary">Your Trade Requests</a>
+  <a href="/trade/otherRequests" type="button" class="btn btn-info">Trade Requests for You</a>
+  <br><br>
+  <h1>All Books</h1><br>
+  <a href="/books/add" class="btn btn-primary">Add a new Book</a><br><br>
+
+  <div class="bookDisplay" id="allBooks">
+
+  </div>
+
+  <script type="text/javascript">
+
+    function template(name, image, id, email) {
+      let tag = "<div class='bookName'><img class='bookImage' src=" + image +" alt="+ name +"><br><br>";
+      console.log(email);
+      if (email != null) {
+        tag += "<form method='post' action='/trade/my'> " +
+               "<input type='hidden' name='id' value='" + id +"' />" +
+               "<input type='hidden' name='email' value='"+ email +"'>" +
+               "<input type='hidden' name='name' value='"+ name +"'>"+
+               "<button type='submit' class='btn btn-default'>Trade</button></form></div>";
+        console.log("executed");
+      }
+      else {
+        console.log("exec");
+        tag += "</div>";
+      }
+      return tag;
+    }
+    $(() => {
+      let email = "{{email}}";
+      let books = [{{{books}}}];
+      console.log(books);
+      console.log(email);
+      if (books == []) {
+        console.log("No Books");
+        $("<p class='center'>You don't have any books yet.</p>").appendTo("#allBooks");
+      }
+      else {
+        for (let book in books) {
+          let shared = books[book].shared.indexOf(email);
+          if (books[book].ownerEmail != email && shared == -1) {
+            $(template(books[book].name, books[book].image,
+              books[book].id, email)).appendTo("#allBooks");
+          }
+          else {
+            $(template(books[book].name, books[book].image,
+              books[book].id, null)).appendTo("#allBooks");
+          }
+
+        }
+      }
+    });
+  </script>
+</div>

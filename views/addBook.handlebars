@@ -1,0 +1,88 @@
+<div class="container">
+  <a href="/trade/myRequests" type="button" class="btn btn-primary">Your Trade Requests</a>
+  <a href="/trade/otherRequests" type="button" class="btn btn-info">Trade Requests for You</a>
+  <br><br>
+  <h1>Add a Book</h1><br>
+  <div class="row">
+    <form id="BookForm" method="post">
+      <div class="form-group col-xs-12 col-sm-4">
+        <input autofocus type="text" class="form-control" id="book" name="book" placeholder="Enter Book Name" required>
+      </div>
+      <div class="form-group col-xs-12 col-sm-4">
+        <button class="btn btn-primary btn-block">Add Book</button>
+      </div>
+    </form>
+  </div>
+  <h4 class="error"></h4>
+  <h4 class="success"></h4><br>
+  <div class="bookDisplay" id="addedBooks"></div>
+
+  <script type="text/javascript">
+    function template(name, image) {
+      let tag = "<div class='bookName'><img class='bookImage' src=" + image +" alt="+ name +"><br><br>" +
+                "<strong>"+ name +"</strong></div>";
+      return tag;
+    }
+    function resetStatus() {
+      $(".error").html('');
+      $(".success").html('');
+    }
+    function addBookToDatabase(title, image, id) {
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "/add", true);
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          let response = xhr.responseText;
+          resetStatus();
+          if (response == "exist") {
+            $(".error").html("Book Already exists");
+          }
+          else if (response == "success") {
+            $(".success").html("Book has been successfully Added");
+          }
+        }
+      }
+      console.log(image);
+      let params = encodeURIComponent("name=" + title + "&id=" + id + "&image=" + image);
+      //let params = JSON.stringify({name: title, image: image, id: id});
+      console.log(params);
+      xhr.send(params);
+    }
+    function getBook(url) {
+      let xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          let json = JSON.parse(xhr.responseText);
+
+          resetStatus();
+          if (json.totalItems == 0) {
+            $(".error").html("Book Not Found.");
+          }
+          else {
+            let title = json.items[0].volumeInfo.title;
+            let image = json.items[0].volumeInfo.imageLinks.thumbnail;
+            let id = json.items[0].id;
+            $(template(title, image)).appendTo("#addedBooks");
+
+            addBookToDatabase(title, image, id);
+
+          }
+
+        }
+      }
+      xhr.send();
+    }
+    $(() => {
+      $("#BookForm").submit((e) => {
+        e.preventDefault();
+        let url = "https://www.googleapis.com/books/v1/volumes?q=";
+        url += encodeURIComponent($("#book").val());
+        $("#book").val('');
+        getBook(url);
+      });
+    });
+  </script>
+</div>

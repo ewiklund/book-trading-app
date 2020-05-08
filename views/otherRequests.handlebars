@@ -1,0 +1,35 @@
+<div class="container">
+  <a href="/trade/myRequests" type="button" class="btn btn-primary">Your Trade Requests</a>
+  <br><br>
+  <h1>Other Trade Requests</h1><br><br>
+  <div class="well" id="otherTradeRequests">
+
+  </div>
+  <script type="text/javascript">
+    function template(bookId, bookName, issuerEmail) {
+      let tag = "<ul><li class='otherTradeRequest col-xs-6 col-sm-5 col-sm-offset-1'>" +
+                "<strong>"+ bookName +"</li>" +
+                "" +
+                "<form method='post'>" +
+                "<input type='hidden' name='bookId' value='"+ bookId + "' />" +
+                "<input type='hidden' name='issuerEmail' value='"+ issuerEmail +"' />" +
+                "<button type='submit' name='trade' value='trade' " +
+                " class='btn btn-success'>Trade</button> " +
+                "<button type='submit' name='cancel' value='cancel' class='btn btn-danger'>" +
+                "Cancel Request</button></form></ul>";
+      return tag;
+    }
+    $(() => {
+      let user = {{{user}}};
+      console.log(user);
+      for (let i in user.otherTradeRequest) {
+        $(template(user.otherTradeRequest[i][0],
+          user.otherTradeRequest[i][1],
+          user.otherTradeRequest[i][2])).appendTo("#otherTradeRequests");
+      }
+      if (user.otherTradeRequest.length == 0) {
+        $("<h4 class='center'>You do not have any trade requests.</h4>").appendTo("#otherTradeRequests");
+      }
+    });
+  </script>
+</div>

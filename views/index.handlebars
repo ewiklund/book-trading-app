@@ -1,0 +1,16 @@
+<div id="masthead" class="jumbotron center"><br>
+  <h1>Book Collector</h1>
+  <p>Trade books with other people</p>
+</div>
+<br>
+{{#if user}}
+  <div class="container">
+    <div class="row">
+      <a class="col-sm-3 indexButtons col-xs-12 btn btn-primary" href="books/add">Add new Book</a>
+      <a class="col-sm-3 indexButtons col-xs-12 col-sm-offset-1 btn btn-primary" href="trade/myRequests">Your Trade Request</a>
+      <a class="col-sm-3 indexButtons col-xs-12 col-sm-offset-1 btn btn-primary" href="trade/otherRequests">Trade Requests for You</a>
+    </div>
+  </div>
+{{else}}
+  <h4 class="center">SignUp to get started</h4>
+{{/if}}
